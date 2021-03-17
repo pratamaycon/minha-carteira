@@ -1,8 +1,14 @@
 import React from 'react';
 
+import ContentHeader from '../../components/ContentHeader';
+
+import { Container } from './styles';
+
 const DashBorad: React.FC = () => {
     return(
-        <h1>DashBorad</h1>
+        <Container>
+            <ContentHeader></ContentHeader>
+        </Container>
     );
 }
 

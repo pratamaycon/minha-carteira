@@ -12,7 +12,7 @@ export const Container = styled.div`
   margin-bottom: 25px;
 `;
 
-export const TitleContainer = styled.h4<ITitleContainerProps>`
+export const TitleContainer = styled.div<ITitleContainerProps>`
     > h1 {
         color: ${(props) => props.theme.colors.white};
         font-size: 1.17em;

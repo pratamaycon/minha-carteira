@@ -22,8 +22,7 @@ interface IBarChartProps {
     }[],
 }
 
-const Content: React.FC<IBarChartProps> = ({ title, data }) => {
-    return(
+const Content: React.FC<IBarChartProps> = ({ title, data }) => (
         <Container>
             <SideLeft>
                 <h2>{title}</h2>
@@ -61,6 +60,5 @@ const Content: React.FC<IBarChartProps> = ({ title, data }) => {
             </SideRight>
         </Container>
     );
-}
 
 export default Content;

@@ -6,29 +6,31 @@ interface ILegendProps {
 
 export const Container = styled.div`
     width: 48%;
-    height: 260px;
+    min-height: 260px;
+
+    font-size: 14px;
+
+    margin: 10px 0;
 
     background-color: ${props => props.theme.colors.tertiary};
     color: ${props => props.theme.colors.white};
 
     border-radius: 7px;
 
-    font-size: 14px;
-
-    margin: 10px 0;
-
     display: flex;
 `;
 
-export const  SideLeft  = styled.aside`
-     padding: 30px 20px;
+export const SideLeft = styled.aside`
+    flex: 1;
+    padding: 30px 20px;
 
-     > h2 {
-         margin-bottom: 20px;
-     }
+    > h2 {
+        padding-left: 16px;
+        margin-bottom: 10px;
+    }
 `;
 
-export const  LegendContainer  = styled.ul`
+export const LegendContainer = styled.ul`
     list-style: none;
 
     height: 170px;
@@ -50,22 +52,27 @@ export const  LegendContainer  = styled.ul`
   }
 `;
 
-export const  Legend  = styled.li<ILegendProps>`
-    display: flex;
+export const Legend = styled.li<ILegendProps>`
+    display: flex;  
     align-items: center;
+
+    position: relative;
+    top: 20%;
 
     margin-bottom: 7px;
 
+    padding-left: 16px;
+    
     > div {
         background-color: ${props => props.color};
 
-        width: 45px;
-        height: 45px;
+        width: 50px;
+        height: 50px;
         border-radius: 6px;
 
         font-size: 16px;
         text-align: center;
-        line-height: 45px;
+        line-height: 48px;
     }
 
     > span {
@@ -73,8 +80,15 @@ export const  Legend  = styled.li<ILegendProps>`
     }
 `;
 
-export const  SideRight = styled.main`
-    display: flex;
+export const SideRight = styled.main`
     flex: 1;
+    min-height: 120px;
+
+    position: relative;
+    bottom: 8%;
+
+    display: flex;
     justify-content: center;
+
+    padding-top: 35px;
 `;

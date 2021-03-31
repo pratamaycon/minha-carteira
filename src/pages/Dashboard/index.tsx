@@ -6,6 +6,7 @@ import WalletBox from '../../components/WalletBox';
 import MessageBox from '../../components/MessageBox';
 import PiechartBox from '../../components/PiechartBox';
 import HistoryBox from '../../components/HistoryBox';
+import BarChartBox from '../../components/BarChartBox';
 
 import gains from '../../repositories/gains';
 import expenses from '../../repositories/expenses';
@@ -14,6 +15,7 @@ import listOfmonths from '../../utils/months';
 import happyImg from '../../assets/happy.svg';
 import sadImg from '../../assets/sad.svg';
 import grinningImg from '../../assets/grinning.svg';
+import opsImg from '../../assets/ops.svg';
 
 
 import { Container, Content } from './styles';
@@ -103,6 +105,14 @@ const DashBorad: React.FC = () => {
                 icon: sadImg
             }
         }
+        else if(totalGains === 0 && totalExpenses === 0){
+            return {
+                title: "Op's!",
+                description: "Neste mês, não há registros de entradas ou saídas.",
+                footerText: "Parece que você não fez nenhum registro no mês e ano selecionado.",
+                icon: opsImg
+            }
+        }
         if (totalBalance === 0) {
             return {
                 title: "Ufaa!",
@@ -119,9 +129,8 @@ const DashBorad: React.FC = () => {
                 icon:happyImg
             }
         }
-    }, [totalBalance]);
-
-    
+    }, [totalBalance, totalGains, totalExpenses]);
+ 
     const relationExpensesVersusGains = useMemo(() => {
         const total = totalGains + totalExpenses;
 
@@ -196,7 +205,89 @@ const DashBorad: React.FC = () => {
             return (yearSelected === currentYear && item.monthNumber <= limitDate)
                 || (yearSelected < currentYear);
         });
-    }, [yearSelected])
+    }, [yearSelected]);
+
+    const relationExpensevesRecurrentVersusEventual = useMemo(() => {
+        let amountRecurrent = 0;
+        let amountEventual = 0;
+
+        expenses.filter(expense => {
+                const date = new Date(expense.date);
+                const year = date.getFullYear();
+                const month = date.getMonth() + 1;
+
+                return month === monthSelected && year === yearSelected;
+            })
+            .forEach((expense => {
+                if (expense.frequency === 'recorrente') {
+                    return amountRecurrent += Number(expense.amount); 
+                }
+                if (expense.frequency === 'eventual') {
+                    return amountEventual += Number(expense.amount); 
+                }
+            }));
+
+            const total = amountRecurrent + amountEventual;
+
+            const percentRecurrent = Number(((amountRecurrent / total) * 100).toFixed(1));
+            const percentEventual = Number(((amountEventual / total) * 100).toFixed(1));
+
+            return [
+                {
+                    name: 'Recorrentes',
+                    amount: amountRecurrent,
+                    percent: percentRecurrent ? percentRecurrent : 0,
+                    color: '#F7931B'
+                },
+                {
+                    name: 'Eventual',
+                    amount: amountEventual,
+                    percent: percentEventual ? percentEventual : 0,
+                    color: '#E44C4E'
+                }
+            ];
+    }, [monthSelected, yearSelected]);
+
+    const relationGainsRecurrentVersusEventual = useMemo(() => {
+        let amountRecurrent = 0;
+        let amountEventual = 0;
+
+        gains.filter(gain => {
+                const date = new Date(gain.date);
+                const year = date.getFullYear();
+                const month = date.getMonth() + 1;
+
+                return month === monthSelected && year === yearSelected;
+            })
+            .forEach((gain => {
+                if (gain.frequency === 'recorrente') {
+                    return amountRecurrent += Number(gain.amount); 
+                }
+                if (gain.frequency === 'eventual') {
+                    return amountEventual += Number(gain.amount); 
+                }
+            }));
+
+            const total = amountRecurrent + amountEventual;
+
+            const percentRecurrent = Number(((amountRecurrent / total) * 100).toFixed(1));
+            const percentEventual = Number(((amountEventual / total) * 100).toFixed(1));
+
+            return [
+                {
+                    name: 'Recorrentes',
+                    amount: amountRecurrent,
+                    percent: percentRecurrent ? percentRecurrent : 0,
+                    color: '#F7931B'
+                },
+                {
+                    name: 'Eventual',
+                    amount: amountEventual,
+                    percent: percentEventual ? percentEventual : 0,
+                    color: '#E44C4E'
+                }
+            ];
+    }, [monthSelected, yearSelected]);
 
     const handleMonthSelected = (month: string) => {
         try {
@@ -266,6 +357,15 @@ const DashBorad: React.FC = () => {
                     lineColorAmountOutPut="#E44C4E"
                 />
 
+                <BarChartBox 
+                    title='Saidas'
+                    data={relationExpensevesRecurrentVersusEventual}
+                 />
+
+                <BarChartBox 
+                    title='Entradas '
+                    data={relationGainsRecurrentVersusEventual}
+                 />
             </Content>
         </Container>
     );

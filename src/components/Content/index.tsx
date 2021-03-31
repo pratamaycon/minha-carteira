@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Container } from './styles'
 
-const Content: React.FC = ({children}) => {
+const BarChartBox: React.FC = ({children}) => {
     return(
         <Container>
             <h1>{children}</h1>
@@ -10,4 +10,4 @@ const Content: React.FC = ({children}) => {
     );
 }
 
-export default Content;
+export default BarChartBox;
